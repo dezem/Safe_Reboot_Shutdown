@@ -1,9 +1,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdbool.h>
-
 #include <switch.h>
-#include "ams_bpc.h"
 
 int main(int argc, char **argv)
 {
@@ -54,6 +52,7 @@ int main(int argc, char **argv)
 	if (abort == false) {
         // AMS safe shutdown or reboot
         spsmShutdown(reboot);
+        spsmExit();
     }
     return 0;
 }
