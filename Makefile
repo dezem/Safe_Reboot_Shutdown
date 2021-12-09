@@ -38,7 +38,7 @@ INCLUDES	:=	include
 EXEFS_SRC	:=	exefs_src
 APP_TITLE	:=	Safe Reboot / Shutdown
 APP_AUTHOR	:=	kempa / dezem
-APP_VERSION	:=	1.0
+APP_VERSION	:=	1.1
 #ROMFS	:=	romfs
 
 #---------------------------------------------------------------------------------
@@ -112,6 +112,19 @@ export LIBPATHS	:=	$(foreach dir,$(LIBDIRS),-L$(dir)/lib)
 
 export BUILD_EXEFS_SRC := $(TOPDIR)/$(EXEFS_SRC)
 
+ifeq ($(strip $(CONFIG_JSON)),)
+	jsons := $(wildcard *.json)
+	ifneq (,$(findstring $(TARGET).json,$(jsons)))
+		export APP_JSON := $(TOPDIR)/$(TARGET).json
+	else
+		ifneq (,$(findstring config.json,$(jsons)))
+			export APP_JSON := $(TOPDIR)/config.json
+		endif
+	endif
+else
+	export APP_JSON := $(TOPDIR)/$(CONFIG_JSON)
+endif
+
 ifeq ($(strip $(ICON)),)
 	icons := $(wildcard *.jpg)
 	ifneq (,$(findstring $(TARGET).jpg,$(icons)))
@@ -153,7 +166,7 @@ $(BUILD):
 #---------------------------------------------------------------------------------
 clean:
 	@echo clean ...
-	@rm -fr $(BUILD) $(TARGET).pfs0 $(TARGET).nso $(TARGET).nro $(TARGET).nacp $(TARGET).elf
+	@rm -fr $(BUILD) $(TARGET).pfs0 $(TARGET).nso $(TARGET).nro $(TARGET).nacp $(TARGET).elf $(TARGET).npdm $(TARGET)_*.nsp hacBrewPack
 
 
 #---------------------------------------------------------------------------------
@@ -165,7 +178,12 @@ DEPENDS	:=	$(OFILES:.o=.d)
 #---------------------------------------------------------------------------------
 # main targets
 #---------------------------------------------------------------------------------
-all	:	$(OUTPUT).nro
+all	:	$(OUTPUT).nro $(OUTPUT).pfs0 $(TARGET).nacp
+ifeq ($(strip $(APP_JSON)),)
+$(OUTPUT).pfs0	:	$(OUTPUT).nso
+else
+$(OUTPUT).pfs0	:	$(OUTPUT).nso $(OUTPUT).npdm
+endif
 
 ifeq ($(strip $(NO_NACP)),)
 $(OUTPUT).nro	:	$(OUTPUT).elf $(OUTPUT).nacp
