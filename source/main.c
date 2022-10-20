@@ -2,6 +2,7 @@
 #include <stdio.h>
 #include <stdbool.h>
 #include <switch.h>
+#include "unistd.h"
 
 int main(int argc, char **argv)
 {
@@ -47,12 +48,14 @@ int main(int argc, char **argv)
     
     // Console deinit
     consoleExit(NULL);
-
+    
     // Check if User has aborted shutdown or reboot
 	if (abort == false) {
+        //sleep
+        usleep(3000000);
         // AMS safe shutdown or reboot
         spsmShutdown(reboot);
+    } else {
         spsmExit();
     }
-    return 0;
 }
