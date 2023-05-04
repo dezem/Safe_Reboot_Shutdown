@@ -1,4 +1,11 @@
 # Safe_Reboot_Shutdown
+
+**PROJECT IS CLOSED, NO MORE UNDER MAINTENANCE**
+
+**I WILL STOP ALL MY WORK FOR ALL PROJECTS**
+
+**THANKS FOR THE TIME**
+
 A safe reboot or shutdown HB-Tool for Nintendo Switch.
 Usage with Atmosphere-NX https://github.com/Atmosphere-NX/Atmosphere
 
